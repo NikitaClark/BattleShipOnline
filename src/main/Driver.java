@@ -1,122 +1,50 @@
-package cs3500.pa03;
+package cs3500.pa04;
 
-
-import static cs3500.pa03.BoardDisplayWhat.SuccessfullShots;
-import static cs3500.pa03.BoardDisplayWhat.coord;
-import static cs3500.pa03.BoardDisplayWhat.firstQHOperator;
-import static cs3500.pa03.BoardDisplayWhat.firstQHScanOperator;
-//import static cs3500.pa03.BoardDisplayWhat.greedAiSizePass;
-import static cs3500.pa03.BoardDisplayWhat.greedAiSizePass;
-import static cs3500.pa03.BoardDisplayWhat.holdToCount;
-import static cs3500.pa03.BoardDisplayWhat.numberOfShipsOnBoard;
-import static cs3500.pa03.BoardDisplayWhat.numberOfShipsSunk;
-import static cs3500.pa03.BoardDisplayWhat.savedShipChoices;
-import static cs3500.pa03.BoardDisplayWhat.secondQHOperator;
-import static cs3500.pa03.BoardDisplayWhat.secondQHScanOperator;
-//import static cs3500.pa03.BoardDisplayWhat.greedAiSizePass;
-import static cs3500.pa03.BoardDisplayWhat.greedSizePass;
-
-import static cs3500.pa03.BoardDisplayWhat.spacer;
-import static cs3500.pa03.BoardDisplayWhat.thirdQHOperator;
-import static cs3500.pa03.BoardDisplayWhat.thirdQHScanOperator;
-
-
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  * This is the main driver of this project.
  */
-public class Driver extends PlayerAbstract {
-  private static int savedInput;
+public class Driver {
+
   /**
-   * Project entry point
+   * This method connects to the server at the given host and port, builds a proxy referee
+   * to handle communication with the server, and sets up a client player.
    *
-   * @param args - no command line args required
-   *
+   * @param host the server host
+   * @param port the server port
+   * @throws IOException if there is a communication issue with the server
    */
+  private static void runClient(String host, int port)
+      throws IOException, IllegalStateException {
+    Socket server = new Socket(host, port);
 
-  public static void main(String[] args) {
-    try {
-   //First question with welcome massage displayed
-       firstQHOperator();
+    ProxyController proxyController = new ProxyController(server, new AiController());
 
-   //Board size parameter holder
-      List<Integer> boardSize = firstQHScanOperator();
-
-   // Second question text output
-      secondQHOperator();
-
-      // Second question scanner
-      secondQHScanOperator();
-
-      // Ship choices parameter holder
-     Map<ShipType, Integer> ShipChoices = savedShipChoices;
-
-
-      // Displays AI board
-      greedAiSizePass(boardSize, ShipChoices);
-
-      // Created a space
-      spacer();
-
-      // Displays player board
-      greedSizePass(boardSize, ShipChoices);
-
-      // Created a space
-      spacer();
-
-     // Asks the third question
-     thirdQHOperator();
-
-     //System.out.println(numberOfShipsSunk());
-
-      // Holds the places where shots will be taking places
-     thirdQHScanOperator(numberOfShipsSunk(), numberOfShipsOnBoard());
-
-     // Returns a list of all shots
-
-    List<Coord> holdShots = coord();
-
-      for (Coord shot : holdShots) {
-        System.out.println("Shot coordinates: (" + shot.getCol()  + ", " + shot.getRow() + ")");
-      }
-
-      SuccessfullShots(holdShots, holdToCount);
-
-      SuccessfullShots(holdShots, holdToCount);
-
-
-
-
-
-
-
-
-
-     // Shots Scanner
-     ///Integer[][] shootsCord =  savedShotCoord;
-
-
-
-    } catch (Exception e) {
-      System.out.println("We encountered an unexpected error");
-    }
+    proxyController.run();
   }
 
-
-
-
   /**
-   * Get the player's name.
-   * NOTE: This may not be important to your implementation for PA03, but it will be later
+   * The main entrypoint into the code as the Client. Given a host and port as parameters, the
+   * client is run. If there is an issue with the client or connecting,
+   * an error message will be printed.
    *
-   * @return the player's name
+   * @param args The expected parameters are the server's host and port
    */
-  @Override
-  public String name() {
-    return null;
+  public static void main(String[] args) throws IOException {
+    if (args.length == 0) {
+      View view = new View();
+
+      view.start(0);
+    } else if (args.length == 2) {
+      try {
+        runClient(args[0], Integer.parseInt(args[1]));
+      } catch (Exception e) {
+        throw new IOException();
+      }
+    } else {
+      throw new IOException();
+    }
   }
 }

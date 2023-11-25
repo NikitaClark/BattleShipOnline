@@ -1,7 +1,8 @@
-package cs3500.pa03;
+package cs3500.pa04;
 
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Represents a single player in a game of BattleSalvo.
@@ -20,10 +21,10 @@ public interface Player {
    * Given the specifications for a BattleSalvo board, return a list of ships with their locations
    * on the board.
    *
-   * @param height the height of the board, range: [6, 15] inclusive
-   * @param width the width of the board, range: [6, 15] inclusive
+   * @param height         the height of the board, range: [6, 15] inclusive
+   * @param width          the width of the board, range: [6, 15] inclusive
    * @param specifications a map of ship type to the number of occurrences each ship should
-   *        appear on the board
+   *                       appear on the board
    * @return the placements of each ship on the board
    */
   List<Ship> setup(int height, int width, Map<ShipType, Integer> specifications);
@@ -32,6 +33,8 @@ public interface Player {
   /**
    * Returns this player's shots on the opponent's board. The number of shots returned should
    * equal the number of ships on this player's board that have not sunk.
+   *
+   * @return the locations of shots on the opponent's board
    */
   List<Coord> takeShots();
 
@@ -43,7 +46,7 @@ public interface Player {
    * @return a filtered list of the given shots that contain all locations of shots that hit a
    *         ship on this board
    */
-  //List<Coord> reportDamage(List<Coord> opponentShotsOnBoard);
+  List<Coord> reportDamage(List<Coord> opponentShotsOnBoard);
 
   /**
    * Reports to this player what shots in their previous volley returned from takeShots()
@@ -60,6 +63,6 @@ public interface Player {
    * @param result if the player has won, lost, or forced a draw
    * @param reason the reason for the game ending
    */
-  //void endGame(GameResult result, String reason);
+  void endGame(GameResult result, String reason);
 
 }

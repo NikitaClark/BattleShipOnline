@@ -1,30 +1,17 @@
-package cs3500.pa03;
+package cs3500.pa04;
 
+/**
+ * Represents the size of the certain ship types
+ */
 public enum ShipType {
-  CARRIER {
-    @Override
-    public int getLength() {
-      return 6;
-    }
-  },
-  BATTLESHIP {
-    @Override
-    public int getLength() {
-      return 5;
-    }
-  },
-  DESTROYER {
-    @Override
-    public int getLength() {
-      return 4;
-    }
-  },
-  SUBMARINE {
-    @Override
-    public int getLength() {
-      return 3;
-    }
-  };
+  CARRIER(6),
+  BATTLESHIP(5),
+  DESTROYER(4),
+  SUBMARINE(3);
 
-  public abstract int getLength();
+  int size;
+
+  ShipType(int i) {
+    this.size = i;
+  }
 }
